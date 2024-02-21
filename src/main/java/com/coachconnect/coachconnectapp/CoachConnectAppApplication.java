@@ -8,6 +8,7 @@ public class CoachConnectAppApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoachConnectAppApplication.class, args);
+		//test commit
 	}
 
 }
