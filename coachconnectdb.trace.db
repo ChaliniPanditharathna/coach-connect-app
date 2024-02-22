@@ -1430,3 +1430,17 @@ Caused by: java.lang.NumberFormatException: 11-10-00
 	at org.h2.util.DateTimeUtils.parseTimestamp(DateTimeUtils.java:338)
 	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:86)
 	... 107 more
+2024-02-21 17:20:52.010578-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-21 17:24:29.658771-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-21 17:29:30.574406-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-21 17:30:59.524078-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-21 17:32:48.751999-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-21 17:35:07.547335-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-21 17:37:03.258599-08:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
