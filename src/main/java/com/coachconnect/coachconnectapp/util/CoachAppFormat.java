@@ -17,9 +17,18 @@ public class CoachAppFormat {
         // Parse the string to a LocalDateTime object using the formatter
         LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
 
-        // Print the LocalDateTime object
         //System.out.println("Parsed LocalDateTime: " + dateTime);
 		return dateTime;
+	}
+	
+	public static LocalDateTime getCurrentLocalDateTime() {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+        // Define the formatter to match the pattern of the string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        String formattedDateTime = currentDateTime.format(formatter);
+  
+        //System.out.println("Parsed LocalDateTime: " + dateTime);
+		return stringToLocalDateTime(formattedDateTime);
 	}
 
 }

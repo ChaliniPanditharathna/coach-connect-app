@@ -36,7 +36,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/coachconnect")
 public class AppointmentController {
 
 	@Autowired
@@ -75,33 +75,24 @@ public class AppointmentController {
 
 	// Endpoint to approve pending appointments
 	@PutMapping("/appointment/approve")
-	public ResponseEntity<String> approvePendingAppointments(
+	public ResponseEntity<Appointment> approvePendingAppointments(
 			@RequestBody AppointmentApproveRequest appointmentApproveRequest
 			) {
 				System.out.println(JwtUtils.getCurrentUserId());
-		
-			
-		/*try {
-			
-			List<Appointment> pendingAppointments = appointmentRepo.findByStatusAndInstructorId(,EnumStatus.STATUS_PENDING);
-			if (pendingAppointments.isEmpty()) {
-				return new ResponseEntity<>("No pending appointments found", HttpStatus.NO_CONTENT);
-			}
-			for (Appointment appointment : pendingAppointments) {
-				appointment.setStatus("APPROVED");
-			}
-			appointmentRepo.saveAll(pendingAppointments);
-			return new ResponseEntity<>("All pending appointments approved successfully", HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Failed to approve pending appointments", HttpStatus.INTERNAL_SERVER_ERROR);
-		}*/
-	    List<Appointment> collect = appointmentRepo
+	    List<Appointment> pendingAppointments = appointmentRepo
 	    		.findByStatus(EnumStatus.STATUS_PENDING)
 	    		.stream()
-	    		.filter(a->a.getInstructor().getId().equals(JwtUtils.getCurrentUserId()))
+	    		.filter(a->a.getInstructor().getId().equals(JwtUtils.getCurrentUserId())&& 
+	    				a.getId().equals(appointmentApproveRequest.getAppointmentId()))
 	    		.collect(Collectors.toList());
-	    System.out.println(collect.toString());
-		return new ResponseEntity<>("Failed to approve pending appointments", HttpStatus.INTERNAL_SERVER_ERROR);
+	    if(pendingAppointments != null && pendingAppointments.size() > 0) {
+	    	Appointment appointment = pendingAppointments.get(0);
+	    	appointment.setStatus(EnumStatus.STATUS_APPROVED);
+	    	appointment.setUpdatedDate(CoachAppFormat.getCurrentLocalDateTime());
+	    	appointmentRepo.save(appointment);
+	    	return new ResponseEntity<>(appointment, HttpStatus.OK);
+	    }
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@PostMapping("/appointment/create")
