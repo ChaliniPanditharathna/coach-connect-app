@@ -30,17 +30,41 @@ public class Appointment {
 	private LocalDateTime updatedDate;
 	
 	@Column(name = "Status")
-    private String status;
+    private EnumStatus status;
 	
 	@ManyToOne
     @JoinColumn(name = "Instructor_Availability_ID")
     private InstructorAvailability instructorAvailability;
+	
+	@ManyToOne
+    @JoinColumn(name = "client_id")
+    private User client;
+    
+    public User getClient() {
+		return client;
+	}
+
+	public void setClient(User client) {
+		this.client = client;
+	}
+
+	public User getInstructor() {
+		return instructor;
+	}
+
+	public void setInstructor(User instructor) {
+		this.instructor = instructor;
+	}
+
+	@ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private User instructor;
 
 	public Appointment() {
 		
 	}
 
-	public Appointment(LocalDateTime dateTime, LocalDateTime createdDate, LocalDateTime updatedDate, String status,
+	public Appointment(LocalDateTime dateTime, LocalDateTime createdDate, LocalDateTime updatedDate, EnumStatus status,
 			InstructorAvailability instructorAvailability) {
 		super();
 		this.dateTime = dateTime;
@@ -48,6 +72,16 @@ public class Appointment {
 		this.updatedDate = updatedDate;
 		this.status = status;
 		this.instructorAvailability = instructorAvailability;
+	}
+
+	public Appointment(LocalDateTime dateTime, LocalDateTime createdDate, LocalDateTime updatedDate,
+			EnumStatus status, User client, User instructor) {
+		this.dateTime = dateTime;
+		this.createdDate = createdDate;
+		this.updatedDate = updatedDate;
+		this.status = status;
+		this.client = client;
+		this.instructor = instructor;
 	}
 
 	public long getId() {
@@ -82,11 +116,11 @@ public class Appointment {
 		this.updatedDate = updatedDate;
 	}
 
-	public String getStatus() {
+	public EnumStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(EnumStatus status) {
 		this.status = status;
 	}
 
@@ -96,6 +130,13 @@ public class Appointment {
 
 	public void setInstructorAvailability(InstructorAvailability instructorAvailability) {
 		this.instructorAvailability = instructorAvailability;
+	}
+
+	@Override
+	public String toString() {
+		return "Appointment [id=" + id + ", dateTime=" + dateTime + ", createdDate=" + createdDate + ", updatedDate="
+				+ updatedDate + ", status=" + status + ", instructorAvailability=" + instructorAvailability
+				+ ", client=" + client + ", instructor=" + instructor + "]";
 	}
 	
 	

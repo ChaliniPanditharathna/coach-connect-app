@@ -2,11 +2,9 @@ package com.coachconnect.coachconnectapp.model;
 
 import java.sql.Time;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,33 +17,32 @@ import jakarta.persistence.Table;
 public class InstructorAvailability {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-	@Column(name = "weekDay")
-	private String weekDay;
+    @Column(name = "weekDay")
+    private String weekDay;
 
-	@Column(name = "startTime")
-	private Time startTime;
+    @Column(name = "startTime")
+    private Time startTime;
 
-	@Column(name = "endTime")
-	private Time endTime;
+    @Column(name = "endTime")
+    private Time endTime;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "instructorID", nullable = false)
-	@JsonIgnore
-	private Instructor instructor;
-	
-	public InstructorAvailability() {
-		
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private User instructor;
+    
+    public InstructorAvailability() {
+        
+    }
+
+	public long getId() {
+		return id;
 	}
 
-	public InstructorAvailability(String weekDay, Time startTime, Time endTime, Instructor instructor) {
-		super();
-		this.weekDay = weekDay;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.instructor = instructor;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getWeekDay() {
@@ -54,14 +51,6 @@ public class InstructorAvailability {
 
 	public void setWeekDay(String weekDay) {
 		this.weekDay = weekDay;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public Time getStartTime() {
@@ -80,12 +69,14 @@ public class InstructorAvailability {
 		this.endTime = endTime;
 	}
 
-	public Instructor getInstructor() {
+	public User getInstructor() {
 		return instructor;
 	}
 
-	public void setInstructor(Instructor instructor) {
+	public void setInstructor(User instructor) {
 		this.instructor = instructor;
 	}
+
+	
 
 }
