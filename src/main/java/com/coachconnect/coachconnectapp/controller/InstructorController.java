@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.coachconnect.coachconnectapp.dto.InstructorResponseDto;
 import com.coachconnect.coachconnectapp.model.Instructor;
 import com.coachconnect.coachconnectapp.model.InstructorRepository;
 
@@ -22,10 +23,11 @@ public class InstructorController {
 	InstructorRepository instructorRepository;
 
 	@GetMapping("/instructor")
-	public ResponseEntity<List<Instructor>> getAllInstructors(
+	public ResponseEntity<InstructorResponseDto> getAllInstructors(
 			@RequestParam(value = "searchKey", required = false) String searchKey) {
 		try {
 			List<Instructor> instructors = new ArrayList<>();
+			InstructorResponseDto instructorResponseDto = new InstructorResponseDto();
 
 			if (searchKey != null && !searchKey.isEmpty()) {
 				instructorRepository.findByExpertiseContainingIgnoreCaseOrCityContainingIgnoreCase(searchKey, searchKey)
@@ -34,13 +36,18 @@ public class InstructorController {
 				instructorRepository.findAll().forEach(instructors::add);
 			}
 
-			if (instructors.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			if (!instructors.isEmpty()) {
+				instructorResponseDto.setInstructors(instructors);
+				instructorResponseDto.setMessage("Successfully retrive instructors.");
+				instructorResponseDto.setStatus(HttpStatus.OK.name());
+			} else {
+				instructorResponseDto.setMessage("No instructors.");
+				instructorResponseDto.setStatus(HttpStatus.NO_CONTENT.name());
 			}
-			return new ResponseEntity<>(instructors, HttpStatus.OK);
+
+			return new ResponseEntity<>(instructorResponseDto, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
-

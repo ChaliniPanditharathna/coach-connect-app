@@ -5,7 +5,6 @@ import java.sql.Time;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,24 +17,36 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Instructor_Availability")
 public class InstructorAvailability {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@Column(name = "weekDay")
 	private String weekDay;
-	
+
 	@Column(name = "startTime")
-	private Time startTime;
+	private String startTime;
 
 	@Column(name = "endTime")
-	private Time endTime;
-	
+	private String endTime;
+
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "instructorID", nullable = false)
-	@JsonIgnore 
+	@JoinColumn(name = "instructor_id", nullable = false)
+	@JsonIgnore
 	private Instructor instructor;
+
+	public InstructorAvailability() {
+
+	}
+
+	public InstructorAvailability(String weekDay, String startTime, String endTime, Instructor instructor) {
+		super();
+		this.weekDay = weekDay;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.instructor = instructor;
+	}
 
 	public String getWeekDay() {
 		return weekDay;
@@ -53,19 +64,19 @@ public class InstructorAvailability {
 		this.id = id;
 	}
 
-	public Time getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Time startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Time getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Time endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

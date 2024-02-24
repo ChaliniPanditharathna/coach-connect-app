@@ -1,12 +1,13 @@
 package com.coachconnect.coachconnectapp.model;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.time.LocalDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,8 +20,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Instructor")
-public class Instructor {
+@Table(name = "Client")
+public class Client {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,36 +54,26 @@ public class Instructor {
 	@Column(name = "gender")
 	private String gender;
 
-	@Column(name = "createdDate ")
+	@Column(name = "createdDate")
 	private LocalDateTime createdDate;
 
-	@Column(name = "updatedDate ")
+	@Column(name = "updatedDate")
 	private LocalDateTime updatedDate;
 
-	@Column(name = "qualification")
-	private String qualification;
+	@Column(name = "description")
+	private String description;
 
-	@Column(name = "expertise")
-	private String expertise;
-
-	@Column(name = "status")
-	private String status;
-
-	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	public Set<ClientInstructor> clientInstructors = new HashSet<>();
 
-	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	// @JsonIgnore
-	public Set<InstructorAvailability> availability = new HashSet<>();
-
-	public Instructor() {
+	public Client() {
 
 	}
 
-	public Instructor(String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
+	public Client(String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
 			String city, String postalCode, String gender, LocalDateTime createdDate, LocalDateTime updatedDate,
-			String qualification, String expertise, String status) {
+			String description) {
 		super();
 		this.fName = fName;
 		this.lName = lName;
@@ -95,9 +86,7 @@ public class Instructor {
 		this.gender = gender;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
-		this.qualification = qualification;
-		this.expertise = expertise;
-		this.status = status;
+		this.description = description;
 	}
 
 	public long getId() {
@@ -196,41 +185,12 @@ public class Instructor {
 		this.updatedDate = updatedDate;
 	}
 
-	public String getQualification() {
-		return qualification;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setQualification(String qualification) {
-		this.qualification = qualification;
-	}
-
-	public String getExpertise() {
-		return expertise;
-	}
-
-	public void setExpertise(String expertise) {
-		this.expertise = expertise;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Set<InstructorAvailability> getAvailability() {
-		return availability;
-	}
-
-	public void setAvailability(Set<InstructorAvailability> availability) {
-		this.availability = availability;
-	}
-
-	public void addAvailability(InstructorAvailability availability) {
-		this.availability.add(availability);
-		availability.setInstructor(this);
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Set<ClientInstructor> getClientInstructors() {
