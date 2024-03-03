@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,6 +30,7 @@ import com.coachconnect.coachconnectapp.model.InstructorAvailability;
 import com.coachconnect.coachconnectapp.model.User;
 import com.coachconnect.coachconnectapp.model.UserRepository;
 import com.coachconnect.coachconnectapp.security.jwt.JwtUtils;
+import com.coachconnect.coachconnectapp.sendemail.EmailService;
 import com.coachconnect.coachconnectapp.service.impl.UserDetailsImpl;
 import com.coachconnect.coachconnectapp.util.CoachAppFormat;
 
@@ -44,6 +47,9 @@ public class AppointmentController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+    private EmailService emailService;
 
 	@GetMapping("/appointment")
 	public ResponseEntity<List<Appointment>> getAllAppointment(@RequestParam(required = false) Long clientId,
@@ -76,24 +82,24 @@ public class AppointmentController {
 	// Endpoint to approve pending appointments
 	@PutMapping("/appointment/approve")
 	public ResponseEntity<Appointment> approvePendingAppointments(
-			@RequestBody AppointmentApproveRequest appointmentApproveRequest
-			) {
-				System.out.println(JwtUtils.getCurrentUserId());
-	    List<Appointment> pendingAppointments = appointmentRepo
-	    		.findByStatus(EnumStatus.STATUS_PENDING)
-	    		.stream()
-	    		.filter(a->a.getInstructor().getId().equals(JwtUtils.getCurrentUserId())&& 
-	    				a.getId().equals(appointmentApproveRequest.getAppointmentId()))
-	    		.collect(Collectors.toList());
-	    if(pendingAppointments != null && pendingAppointments.size() > 0) {
-	    	Appointment appointment = pendingAppointments.get(0);
-	    	appointment.setStatus(EnumStatus.STATUS_APPROVED);
-	    	appointment.setUpdatedDate(CoachAppFormat.getCurrentLocalDateTime());
-	    	appointmentRepo.save(appointment);
-	    	return new ResponseEntity<>(appointment, HttpStatus.OK);
-	    }
+			@RequestBody AppointmentApproveRequest appointmentApproveRequest) {
+		System.out.println(JwtUtils.getCurrentUserId());
+		List<Appointment> pendingAppointments = appointmentRepo.findByStatus(EnumStatus.STATUS_PENDING);
+		for (Appointment appointment : pendingAppointments) {
+			if (appointment.getInstructor().getId().equals(JwtUtils.getCurrentUserId())
+					&& appointment.getId().equals(appointmentApproveRequest.getAppointmentId())) {
+				appointment.setStatus(EnumStatus.STATUS_APPROVED);
+				appointment.setUpdatedDate(CoachAppFormat.getCurrentLocalDateTime());
+				appointmentRepo.save(appointment);
+				String subject = "Appointment Approved";
+				String body = "Your appointment has been approved.";
+				sendEmailNotification(appointment, subject, body);
+				return new ResponseEntity<>(appointment, HttpStatus.OK);
+			}
+		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
+	
 	
 	@PostMapping("/appointment/create")
 	public ResponseEntity<String> createAppointment(
@@ -113,9 +119,65 @@ public class AppointmentController {
 			
 	}
 	
+	//Endpoint for reject appointments
+	@PutMapping("/appointment/reject")
+	public ResponseEntity<Appointment> rejectPendingAppointments(
+			@RequestBody AppointmentRejectRequest appointmentRejectRequest){
+		System.out.println(JwtUtils.getCurrentUserId());
+		List<Appointment> pendingAppointments = appointmentRepo.findByStatus(EnumStatus.STATUS_PENDING);
+		
+		for (Appointment appointment : pendingAppointments) {
+	        if (appointment.getInstructor().getId().equals(JwtUtils.getCurrentUserId())
+	                && appointment.getId().equals(appointmentRejectRequest.getAppointmentId())) {
+	        	
+	            appointment.setStatus(EnumStatus.STATUS_REJECTED);
+	            appointment.setRejectedReason(appointmentRejectRequest.getRejectedReason());
+	            appointment.setUpdatedDate(CoachAppFormat.getCurrentLocalDateTime());
+	            appointmentRepo.save(appointment);
+	            
+	            String subject = "Appointment has been rejected";
+				String body = "Your appointment has been rejected.";
+				sendEmailNotification(appointment, subject, body);
+	            // Release occupied slots
+	            //appointment.getInstructor().getSlots().add(appointment.getSlot());
+	            //appointmentRepo.save(appointment.getInstructor());
+	            return new ResponseEntity<>(appointment, HttpStatus.OK);
+	        }
+	    }
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
 	
-
+	//Endpoint for reschedule appointment
+	@PutMapping("/appointment/reschedule")
+	public ResponseEntity<Appointment> reschedulePendingAppointments(
+	        @RequestBody AppointmentRescheduleRequest appointmentRescheduleRequest) {
+	    System.out.println(JwtUtils.getCurrentUserId());
+	    List<Appointment> pendingAppointments = appointmentRepo.findByStatus(EnumStatus.STATUS_PENDING);
+	    for (Appointment appointment : pendingAppointments) {
+	        if (appointment.getInstructor().getId().equals(JwtUtils.getCurrentUserId())
+	                && appointment.getId().equals(appointmentRescheduleRequest.getAppointmentId())) {
+	        	
+	            appointment.setStatus(EnumStatus.STATUS_APPROVED);
+	            appointment.setDateTime(appointmentRescheduleRequest.getNewDateTime());
+	            appointment.setUpdatedDate(CoachAppFormat.getCurrentLocalDateTime());
+	            appointmentRepo.save(appointment);
+	            String subject = "Appointment has been rescheduled";
+				String body = "Your appointment has been rescheduled.";
+				sendEmailNotification(appointment, subject, body);
+	            return new ResponseEntity<>(appointment, HttpStatus.OK);
+	        }
+	    }
+	    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
+	private void sendEmailNotification(Appointment appointment,String subject,String body) {
+		String recipientEmail = appointment.getClient().getEmail(); 
+		 emailService.sendEmail(recipientEmail,subject, body);
+	}
+	
 }
+
+
 
 class CreateAppointmentDto {
 	private String dateTime;
@@ -178,4 +240,49 @@ class AppointmentApproveRequest {
 	public void setAppointmentId(Long appointmentId) {
 		this.appointmentId = appointmentId;
 	}
+}
+
+class AppointmentRejectRequest {
+    private Long appointmentId;
+    private String rejectedReason;
+
+   
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+    }
+}
+
+class AppointmentRescheduleRequest {
+    private Long appointmentId;
+    private LocalDateTime newDateTime;
+
+    // Constructors, getters, and setters
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public LocalDateTime getNewDateTime() {
+        return newDateTime;
+    }
+
+    public void setNewDateTime(LocalDateTime newDateTime) {
+        this.newDateTime = newDateTime;
+    }
 }

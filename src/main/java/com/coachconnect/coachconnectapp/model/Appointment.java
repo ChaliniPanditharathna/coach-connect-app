@@ -44,8 +44,19 @@ public class Appointment {
 	@ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+	
+	@Column(name = "RejectedReason")
+	private String rejectedReason;
     
-    public User getClient() {
+    public String getRejectedReason() {
+		return rejectedReason;
+	}
+
+	public void setRejectedReason(String rejectedReason) {
+		this.rejectedReason = rejectedReason;
+	}
+
+	public User getClient() {
 		return client;
 	}
 
