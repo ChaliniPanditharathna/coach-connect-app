@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
@@ -82,6 +85,18 @@ public class JwtUtils {
 		return Jwts.builder().setSubject(username).setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(key(), SignatureAlgorithm.HS256).compact();
+	}
+	
+	public static Long getCurrentUserId() {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null && authentication.isAuthenticated()) {
+	        Object principal = authentication.getPrincipal();
+	        if (principal instanceof UserDetails) {
+	            UserDetailsImpl userDetails = (UserDetailsImpl) principal;
+	            return userDetails.getId(); 
+	        }
+	    }
+	    return null; 
 	}
 
 }
