@@ -65,12 +65,12 @@ public class RegisterController {
 			} else {
 				stringRoles.forEach(role -> {
 					switch (role) {
-					case "admin":
+					case "ROLE_ADMIN":
 						Role roleAdmin = roleRepository.findByName(EnumRole.ROLE_ADMIN)
 								.orElseThrow(() -> new RuntimeException("Error: The role is not found."));
 						roles.add(roleAdmin);
 						break;
-					case "instructor":
+					case "ROLE_INSTRUCTOR":
 						Role roleInstructor = roleRepository.findByName(EnumRole.ROLE_INSTRUCTOR)
 								.orElseThrow(() -> new RuntimeException("Error: The role is not found."));
 						roles.add(roleInstructor);
