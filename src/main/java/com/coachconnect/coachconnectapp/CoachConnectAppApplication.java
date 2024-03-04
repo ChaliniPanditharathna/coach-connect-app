@@ -16,7 +16,7 @@ public class CoachConnectAppApplication {
 		SpringApplication.run(CoachConnectAppApplication.class, args);
 	}
 	
-	
+	/*
 	@Bean
 	ApplicationRunner init(RoleRepository roleRepo) {
 		return args -> {
@@ -28,6 +28,6 @@ public class CoachConnectAppApplication {
 			roleRepo.save(instructor);
 
 		};
-	}
+	}*/
 
 }
