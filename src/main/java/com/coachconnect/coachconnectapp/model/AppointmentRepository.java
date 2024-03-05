@@ -8,6 +8,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 	List<Appointment> findAll();
     List<Appointment> findByStatus(EnumStatus status);
     List<Appointment> findByClientId(Long clientId);
-    List<Appointment> findByInstructorId(Long instructorId);
+   // List<Appointment> findByInstructorId(Long instructorId);
    
 }

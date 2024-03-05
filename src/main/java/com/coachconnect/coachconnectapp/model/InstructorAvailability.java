@@ -2,9 +2,11 @@ package com.coachconnect.coachconnectapp.model;
 
 import java.sql.Time;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,9 +31,14 @@ public class InstructorAvailability {
     @Column(name = "endTime")
     private Time endTime;
 
-    @ManyToOne
-    @JoinColumn(name = "instructor_id")
-    private User instructor;
+//    @ManyToOne
+//    @JoinColumn(name = "instructor_id")
+//    private Instructor instructor;
+    
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "instructor_id", nullable = false)
+	@JsonIgnore
+	private Instructor instructor;
     
     public InstructorAvailability() {
         
@@ -69,11 +76,11 @@ public class InstructorAvailability {
 		this.endTime = endTime;
 	}
 
-	public User getInstructor() {
+	public Instructor getInstructor() {
 		return instructor;
 	}
 
-	public void setInstructor(User instructor) {
+	public void setInstructor(Instructor instructor) {
 		this.instructor = instructor;
 	}
 
