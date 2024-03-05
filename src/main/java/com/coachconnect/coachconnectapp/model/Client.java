@@ -24,9 +24,12 @@ import jakarta.persistence.Table;
 public class Client {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(name = "userId")
+	private long userId;
+	
 	@Column(name = "fName")
 	private String fName;
 
@@ -71,10 +74,11 @@ public class Client {
 
 	}
 
-	public Client(String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
+	public Client(Long userId, String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
 			String city, String postalCode, String gender, LocalDateTime createdDate, LocalDateTime updatedDate,
 			String description) {
 		super();
+		this.userId = userId;
 		this.fName = fName;
 		this.lName = lName;
 		this.email = email;
@@ -199,6 +203,14 @@ public class Client {
 
 	public void setClientInstructors(Set<ClientInstructor> clientInstructors) {
 		this.clientInstructors = clientInstructors;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 }
