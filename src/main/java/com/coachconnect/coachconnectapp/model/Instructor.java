@@ -23,8 +23,11 @@ import jakarta.persistence.Table;
 public class Instructor {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@Column(name = "userId")
+	private long userId;
 
 	@Column(name = "fName")
 	private String fName;
@@ -67,6 +70,8 @@ public class Instructor {
 
 	@Column(name = "status")
 	private String status;
+	
+	
 
 	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
@@ -80,10 +85,11 @@ public class Instructor {
 
 	}
 
-	public Instructor(String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
+	public Instructor(Long userId, String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
 			String city, String postalCode, String gender, LocalDateTime createdDate, LocalDateTime updatedDate,
 			String qualification, String expertise, String status) {
 		super();
+		this.userId = userId;
 		this.fName = fName;
 		this.lName = lName;
 		this.email = email;
@@ -240,5 +246,14 @@ public class Instructor {
 	public void setClientInstructors(Set<ClientInstructor> clientInstructors) {
 		this.clientInstructors = clientInstructors;
 	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
 
 }
