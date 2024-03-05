@@ -16,6 +16,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -66,9 +69,36 @@ public class Client {
 	@Column(name = "description")
 	private String description;
 
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable (name = "CLIENT_INSTRUCTOR",
+	joinColumns = {
+			@JoinColumn(name ="client_id", referencedColumnName = "id"),
+	}, inverseJoinColumns = {
+			@JoinColumn(name ="instructor_id", referencedColumnName = "id")
+	}
+	)
+	private Set<Instructor> instructors;
+
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore
-	public Set<ClientInstructor> clientInstructors = new HashSet<>();
+	//@JsonIgnore
+	public Set<Appointment>  appointments = new HashSet <>();
+
+	public Set<Instructor> getInstructors() {
+		return instructors;
+	}
+
+	public void setInstructors(Set<Instructor> instructors) {
+		this.instructors = instructors;
+	}
+
+	public Set<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(Set<Appointment> appointments) {
+		this.appointments = appointments;
+	}
 
 	public Client() {
 
@@ -197,13 +227,7 @@ public class Client {
 		this.description = description;
 	}
 
-	public Set<ClientInstructor> getClientInstructors() {
-		return clientInstructors;
-	}
 
-	public void setClientInstructors(Set<ClientInstructor> clientInstructors) {
-		this.clientInstructors = clientInstructors;
-	}
 
 	public long getUserId() {
 		return userId;

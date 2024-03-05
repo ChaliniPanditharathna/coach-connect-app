@@ -15,6 +15,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -25,7 +26,7 @@ public class Instructor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	@Column(name = "userId")
 	private long userId;
 
@@ -70,24 +71,34 @@ public class Instructor {
 
 	@Column(name = "status")
 	private String status;
-	
-	
 
-	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "instructors", fetch = FetchType.LAZY)
 	@JsonIgnore
-	public Set<ClientInstructor> clientInstructors = new HashSet<>();
+	public Set<Client> Clients;
+
+	public Set<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(Set<Appointment> appointments) {
+		this.appointments = appointments;
+	}
 
 	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	// @JsonIgnore
 	public Set<InstructorAvailability> availability = new HashSet<>();
 
+	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @JsonIgnore
+	public Set<Appointment> appointments = new HashSet<>();
+
 	public Instructor() {
 
 	}
 
-	public Instructor(Long userId, String fName, String lName, String email, LocalDate birthDate, String unitNo, String street,
-			String city, String postalCode, String gender, LocalDateTime createdDate, LocalDateTime updatedDate,
-			String qualification, String expertise, String status) {
+	public Instructor(Long userId, String fName, String lName, String email, LocalDate birthDate, String unitNo,
+			String street, String city, String postalCode, String gender, LocalDateTime createdDate,
+			LocalDateTime updatedDate, String qualification, String expertise, String status) {
 		super();
 		this.userId = userId;
 		this.fName = fName;
@@ -239,12 +250,12 @@ public class Instructor {
 		availability.setInstructor(this);
 	}
 
-	public Set<ClientInstructor> getClientInstructors() {
-		return clientInstructors;
+	public Set<Client> getClients() {
+		return Clients;
 	}
 
-	public void setClientInstructors(Set<ClientInstructor> clientInstructors) {
-		this.clientInstructors = clientInstructors;
+	public void setClients(Set<Client> clients) {
+		Clients = clients;
 	}
 
 	public long getUserId() {
@@ -254,6 +265,5 @@ public class Instructor {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-
 
 }
