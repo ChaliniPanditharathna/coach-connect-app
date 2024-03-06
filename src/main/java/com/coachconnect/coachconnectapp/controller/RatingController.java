@@ -18,6 +18,8 @@ import com.coachconnect.coachconnectapp.model.Instructor;
 import com.coachconnect.coachconnectapp.model.Rating;
 import com.coachconnect.coachconnectapp.model.RatingRepository;
 import com.coachconnect.coachconnectapp.model.User;
+import com.coachconnect.coachconnectapp.response.RatingCreateResponseDto;
+import com.coachconnect.coachconnectapp.request.RatingRequestDto;
 
 @RestController
 @RequestMapping("/api")
@@ -26,23 +28,27 @@ public class RatingController {
 	@Autowired
 	RatingRepository ratingRepository;
 
-	@Autowired
+	//@Autowired
 	//User userRepository;
 	
 	/*
 	@GetMapping("/ratings")
 	public ResponseEntity<List<Rating>> getAllRatings(
-				@RequestParam(required = false) long id,
-				@RequestParam(required = false) Client client,
-				@RequestParam(required = false) Instructor instructor){
+				@RequestParam(required = false) Long clientId,
+				@RequestParam(required = false) Long instructorId){
+				
 		
 		try {
 			List<Rating> ratings = new ArrayList<Rating>();
 			
-			if(instructor == null) {
+			if(clientId != null) {
+				ratingRepository.findByClientId(clientId).forEach(ratings::add);
+			}else if(instructorId != null){
+				ratingRepository.findByInstructorId(instructorId).forEach(ratings::add);
+			}
+			
+			else {
 				ratingRepository.findAll().forEach(ratings::add);
-			}else {
-				ratingRepository.findById(id).forEach(ratings::add);
 			}
 			if(ratings.isEmpty())
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,18 +64,24 @@ public class RatingController {
 		
 	}
 	*/
+	
 	@PostMapping("/ratings")
-	public ResponseEntity<Rating> createRating(@RequestBody Rating ratings){
+	public ResponseEntity<RatingCreateResponseDto> createRating(
+										@RequestBody RatingRequestDto ratings){
 		
 		try {
 			Rating _ratings = ratingRepository
 								.save(new Rating(ratings.getComment(), ratings.getPoints(),
-										ratings.getCliendId(), ratings.getInstructorId()));
-			return new ResponseEntity<>(_ratings, HttpStatus.CREATED);		
+										ratings.getClient(), ratings.getInstructor()));
+			RatingCreateResponseDto ratingResponseDto = new RatingCreateResponseDto();
+			ratingResponseDto.setRatings(_ratings);
+			ratingResponseDto.setMessage("Rating created successfully");
+			return new ResponseEntity<>(ratingResponseDto, HttpStatus.CREATED);		
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);	
 		}
 		
 	}
+	
 }
