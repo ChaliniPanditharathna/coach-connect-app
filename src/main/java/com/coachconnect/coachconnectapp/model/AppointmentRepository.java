@@ -12,13 +12,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 	List<Appointment> findAll();
     List<Appointment> findByStatus(EnumStatus status);
     List<Appointment> findByClientId(Long clientId);
-   // List<Appointment> findByInstructorId(@Param("instructorId") Long instructorId);
+    List<Appointment> findByInstructorId(Long instructorId);
     
 	Iterable<Appointment> findByDateAfter(LocalDate now);
-
 	//Iterable<Appointment> findByDateBeforeAndInstructorID(LocalDate now, long id);
 	//Iterable<Appointment> findByDateBeforeAndInstructorID(LocalDate now, long id);
 	Iterable<Appointment> findByDateBeforeAndInstructorId(LocalDate now, long id);
+	
     
    
 }
