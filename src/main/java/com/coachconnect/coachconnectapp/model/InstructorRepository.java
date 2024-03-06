@@ -13,4 +13,6 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 	
 	Optional<Instructor> findByUserId(long userId);
 
+	Instructor findByUserId(long currentUserId);
+
 }

@@ -55,17 +55,19 @@ public class Appointment {
 	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "instructorAvailability_Id", nullable = false)
 	private InstructorAvailability instructorAvailability;
-
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "clientInstructor_id", nullable = false)
-	@JsonIgnore
-	private ClientInstructor clientInstructor;
+	@JoinColumn(name = "client_id", nullable = false)
+	@JsonIgnore // not include in the json
+	private Client client;
 	
-	@ManyToOne
-    @JoinColumn(name = "client_id")
-    private User client;
 	
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "instructor_id", nullable = false)
+	@JsonIgnore // not include in the json
+	private Instructor instructor;
+	
+
 	@Column(name = "RejectedReason")
 	private String rejectedReason;
     
@@ -74,21 +76,22 @@ public class Appointment {
 	public Appointment() {
 		
 	}
-
-	public Appointment( LocalDateTime createdDate, LocalDateTime updatedDate, EnumStatus status,
-			InstructorAvailability instructorAvailability, LocalDate date, ClientInstructor clientInstructor) {
+	public Appointment(LocalDateTime createdDate, LocalDateTime updatedDate, EnumStatus status, LocalDate date,
+			InstructorAvailability instructorAvailability, Client client, Instructor instructor,
+			String rejectedReason) {
 		super();
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
 		this.status = status;
 		this.date = date;
 		this.instructorAvailability = instructorAvailability;
-		this.clientInstructor = clientInstructor;
+		this.client = client;
+		this.instructor = instructor;
+		this.rejectedReason = rejectedReason;
 	}
-	
 
 	public Appointment(LocalDate dateTime, LocalDateTime createdDate, LocalDateTime updatedDate,
-			EnumStatus status, User client, Instructor instructor) {
+			EnumStatus status, Client client, Instructor instructor) {
 		this.date = dateTime;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
@@ -105,8 +108,6 @@ public class Appointment {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
@@ -146,14 +147,6 @@ public class Appointment {
 				+ updatedDate + ", status=" + status + ", instructorAvailability=" + instructorAvailability
 				+ ", client=" + client + "]";
 	}
-
-	public ClientInstructor getClientInstructor() {
-		return clientInstructor;
-	}
-
-	public void setClientInstructor(ClientInstructor clientInstructor) {
-		this.clientInstructor = clientInstructor;
-	}
 	
     public String getRejectedReason() {
 		return rejectedReason;
@@ -163,13 +156,23 @@ public class Appointment {
 		this.rejectedReason = rejectedReason;
 	}
 
-	public User getClient() {
+	public Client getClient() {
 		return client;
 	}
 
-	public void setClient(User client) {
+	public void setClient(Client client) {
 		this.client = client;
 	}
+
+	public Instructor getInstructor() {
+		return instructor;
+	}
+
+	public void setInstructor(Instructor instructor) {
+		this.instructor = instructor;
+	}
+
+
 	
 
 }
