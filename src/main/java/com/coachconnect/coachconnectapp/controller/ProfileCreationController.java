@@ -52,9 +52,9 @@ public class ProfileCreationController {
 
 			if (userData.get().getRoles().stream().anyMatch(role -> role.getName().equals(EnumRole.ROLE_INSTRUCTOR))) {
 
-				Optional<Instructor> instructorData = instructorRepository.findByUserId(userData.get().getId());
+				Instructor instructorData = instructorRepository.findByUserId(userData.get().getId());
 
-				if (instructorData.isEmpty()) {
+				if (instructorData == null) {
 					instructorRepository.save(new Instructor(userData.get().getId(), profileUpdateRequest.getfName(),
 							profileUpdateRequest.getlName(), userData.get().getEmail(),
 							profileUpdateRequest.getBirthDate(), profileUpdateRequest.getUnitNo(),
@@ -65,20 +65,19 @@ public class ProfileCreationController {
 					return ResponseEntity.ok(new MessageResponse("Instructor updated successfully!"));
 				} else {
 
-					Instructor updateInstructor = instructorData.get();
-					updateInstructor.setfName(profileUpdateRequest.getfName());
-					updateInstructor.setlName(profileUpdateRequest.getlName());
-					updateInstructor.setEmail(profileUpdateRequest.getEmail());
-					updateInstructor.setBirthDate(profileUpdateRequest.getBirthDate());
-					updateInstructor.setUnitNo(profileUpdateRequest.getUnitNo());
-					updateInstructor.setStreet(profileUpdateRequest.getStreet());
-					updateInstructor.setCity(profileUpdateRequest.getCity());
-					updateInstructor.setPostalCode(profileUpdateRequest.getPostalCode());
-					updateInstructor.setGender(profileUpdateRequest.getGender());
-					updateInstructor.setQualification(profileUpdateRequest.getQualification());
-					updateInstructor.setExpertise(profileUpdateRequest.getExpertise());
+					instructorData.setfName(profileUpdateRequest.getfName());
+					instructorData.setlName(profileUpdateRequest.getlName());
+					instructorData.setEmail(profileUpdateRequest.getEmail());
+					instructorData.setBirthDate(profileUpdateRequest.getBirthDate());
+					instructorData.setUnitNo(profileUpdateRequest.getUnitNo());
+					instructorData.setStreet(profileUpdateRequest.getStreet());
+					instructorData.setCity(profileUpdateRequest.getCity());
+					instructorData.setPostalCode(profileUpdateRequest.getPostalCode());
+					instructorData.setGender(profileUpdateRequest.getGender());
+					instructorData.setQualification(profileUpdateRequest.getQualification());
+					instructorData.setExpertise(profileUpdateRequest.getExpertise());
 
-					return new ResponseEntity<>(instructorRepository.save(updateInstructor), HttpStatus.OK);
+					return new ResponseEntity<>(instructorRepository.save(instructorData), HttpStatus.OK);
 				}
 
 			} else if (userData.get().getRoles().stream()

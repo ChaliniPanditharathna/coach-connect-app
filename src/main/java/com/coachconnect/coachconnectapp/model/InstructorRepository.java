@@ -10,8 +10,6 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 	List<Instructor> findAll();
 	
 	List<Instructor> findByExpertiseContainingIgnoreCaseOrCityContainingIgnoreCase(String expertise, String city);
-	
-	Optional<Instructor> findByUserId(long userId);
 
 	Instructor findByUserId(long currentUserId);
 
