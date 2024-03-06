@@ -20,7 +20,6 @@ import com.coachconnect.coachconnectapp.model.InstructorAvailabilityRepository;
 import com.coachconnect.coachconnectapp.model.InstructorRepository;
 import com.coachconnect.coachconnectapp.model.User;
 import com.coachconnect.coachconnectapp.model.UserRepository;
-import com.coachconnect.coachconnectapp.request.InstructorAvailabilityRequest;
 import com.coachconnect.coachconnectapp.request.ProfileUpdateRequest;
 import com.coachconnect.coachconnectapp.response.MessageResponse;
 
