@@ -28,23 +28,23 @@ public class Rating {
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     //private User client;
-	private Client cliendId;
+	private Client client;
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "instructor_id", nullable = false)
     //private User instructor;
-	private Instructor instructorId;
+	private Instructor instructor;
 	
 	
 	
 	public Rating() {}
 
-	public Rating(String comment, double points, Client clientId, Instructor instructorId) {
+	public Rating(String comment, double points, Client client, Instructor instructor) {
 		super();
 		this.comment = comment;
 		this.points = points;
-		this.cliendId = clientId;
-		this.instructorId = instructorId;
+		this.client = client;
+		this.instructor = instructor;
 	}
 	
 	public Rating(String comment, double points) {
@@ -79,19 +79,19 @@ public class Rating {
 	}
 
 	public Client getCliendId() {
-		return cliendId;
+		return client;
 	}
 
-	public void setCliendId(Client cliendId) {
-		this.cliendId = cliendId;
+	public void setCliendId(Client client) {
+		this.client = client;
 	}
 
 	public Instructor getInstructorId() {
-		return instructorId;
+		return instructor;
 	}
 
-	public void setInstructorId(Instructor instructorId) {
-		this.instructorId = instructorId;
+	public void setInstructorId(Instructor instructor) {
+		this.instructor = instructor;
 	}
 	
 	

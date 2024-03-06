@@ -27,8 +27,9 @@ public class RatingController {
 	RatingRepository ratingRepository;
 
 	@Autowired
-	User userRepository;
+	//User userRepository;
 	
+	/*
 	@GetMapping("/ratings")
 	public ResponseEntity<List<Rating>> getAllRatings(
 				@RequestParam(required = false) long id,
@@ -56,7 +57,7 @@ public class RatingController {
 		
 		
 	}
-	
+	*/
 	@PostMapping("/ratings")
 	public ResponseEntity<Rating> createRating(@RequestBody Rating ratings){
 		
