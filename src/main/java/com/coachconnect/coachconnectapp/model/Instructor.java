@@ -15,6 +15,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -70,16 +72,15 @@ public class Instructor {
 
 	@Column(name = "status")
 	private String status;
-	
-	
-
-	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnore
-	public Set<ClientInstructor> clientInstructors = new HashSet<>();
 
 	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	// @JsonIgnore
 	public Set<InstructorAvailability> availability = new HashSet<>();
+
+	
+	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//@JsonIgnore
+	public Set<Appointment>  appointment = new HashSet <>();
 
 	public Instructor() {
 
@@ -239,20 +240,20 @@ public class Instructor {
 		availability.setInstructor(this);
 	}
 
-	public Set<ClientInstructor> getClientInstructors() {
-		return clientInstructors;
-	}
-
-	public void setClientInstructors(Set<ClientInstructor> clientInstructors) {
-		this.clientInstructors = clientInstructors;
-	}
-
 	public long getUserId() {
 		return userId;
 	}
 
 	public void setUserId(long userId) {
 		this.userId = userId;
+	}
+
+	public Set<Appointment> getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(Set<Appointment> appointment) {
+		this.appointment = appointment;
 	}
 
 
