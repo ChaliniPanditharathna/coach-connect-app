@@ -67,7 +67,7 @@ public class Client {
 	private String description;
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	//@JsonIgnore
+	@JsonIgnore
 	public Set<Appointment>  appointment = new HashSet <>();
 	
 	public Client() {

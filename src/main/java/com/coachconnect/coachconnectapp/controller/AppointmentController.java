@@ -228,7 +228,7 @@ public class AppointmentController {
 			long currentUserId = JwtUtils.getCurrentUserId(); 
 		
 			Instructor instructor = instructorRepo.findByUserId(currentUserId);
-			System.out.println("ytesting 02" +instructor.getId() );
+			
 			if ("previous".equals(searchKey)) {
 				appointmentRepo.findByDateBeforeAndInstructorId(LocalDate.now(), instructor.getId()).forEach(appointments::add);
 
@@ -254,7 +254,7 @@ public class AppointmentController {
 			if (!appointments.isEmpty()) {
 				appointmentResponseDto.setAppointments(appointmentDtos);
 				appointmentResponseDto.setStatus(HttpStatus.OK.name());
-				appointmentResponseDto.setMessage("Successfully retrive appointmnets.");
+				appointmentResponseDto.setMessage("Successfully retrieve appointmnets.");
 			} else {
 				appointmentResponseDto.setMessage("No matching appoinments.");
 				appointmentResponseDto.setStatus(HttpStatus.NO_CONTENT.name());

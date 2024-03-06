@@ -79,7 +79,7 @@ public class Instructor {
 
 	
 	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	//@JsonIgnore
+	@JsonIgnore
 	public Set<Appointment>  appointment = new HashSet <>();
 
 	public Instructor() {

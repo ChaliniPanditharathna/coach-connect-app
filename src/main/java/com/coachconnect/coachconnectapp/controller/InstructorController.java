@@ -16,7 +16,7 @@ import com.coachconnect.coachconnectapp.model.InstructorRepository;
 import com.coachconnect.coachconnectapp.response.InstructorResponseDto;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/coachconnect")
 public class InstructorController {
 	@Autowired
 	InstructorRepository instructorRepository;
@@ -38,7 +38,7 @@ public class InstructorController {
 
 			if (!instructors.isEmpty()) {
 				instructorResponseDto.setInstructors(instructors);
-				instructorResponseDto.setMessage("Successfully retrive instructors.");
+				instructorResponseDto.setMessage("Successfully retrieve instructors.");
 				instructorResponseDto.setStatus(HttpStatus.OK.name());
 			} else {
 				instructorResponseDto.setMessage("No instructors.");
