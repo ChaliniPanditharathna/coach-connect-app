@@ -65,6 +65,46 @@ public class RatingController {
 	}
 	*/
 	
+	@GetMapping("/ratings")
+	public ResponseEntity<RatingCreateResponseDto> getAllRatings(
+				@RequestParam(required = false) Long clientId){
+				
+		
+		try {
+			List<Rating> ratings = new ArrayList<Rating>();
+			RatingCreateResponseDto ratingresponsedto = new RatingCreateResponseDto();
+			
+			if(clientId != null) {
+				ratingRepository.findByClientId(clientId).forEach(ratings::add);
+			}/*else if(instructorId != null){
+				ratingRepository.findByInstructorId(instructorId).forEach(ratings::add);
+			}*/
+			
+			else {
+				ratingRepository.findAll().forEach(ratings::add);
+			}
+			if(ratings.isEmpty()) {
+				ratingresponsedto.setMessage("No Ratings");
+				ratingresponsedto.setStatus(HttpStatus.NO_CONTENT.name());
+				return new ResponseEntity<>(ratingresponsedto, HttpStatus.NO_CONTENT);
+			}else {
+				ratingresponsedto.set_ratingsList(ratings);
+				ratingresponsedto.setMessage("Ratings retrieved successfully");
+				ratingresponsedto.setStatus(HttpStatus.OK.name());
+			}
+			
+			return new ResponseEntity<>(ratingresponsedto, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		
+		
+		
+	}
+	
+	
 	@PostMapping("/ratings")
 	public ResponseEntity<RatingCreateResponseDto> createRating(
 										@RequestBody RatingRequestDto ratings){

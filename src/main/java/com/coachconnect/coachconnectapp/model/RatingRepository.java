@@ -10,7 +10,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long>{
 	List<Rating> findByComment(String comment);
 	List<Rating> findByPoints(double points);
 	//List<Rating> findByInstructorId(Long instructorId);
-	//List<Rating> findByClientId(Long clientId);;
+	List<Rating> findByClientId(Long clientId);;
 	//List<Rating> findById(long id);
 
 }

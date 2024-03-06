@@ -12,6 +12,8 @@ public class RatingCreateResponseDto {
 	private String status;
 	
 	private Rating ratings;
+	
+	private List<Rating> _ratings;
 
 	public String getMessage() {
 		return message;
@@ -35,6 +37,14 @@ public class RatingCreateResponseDto {
 
 	public void setRatings(Rating ratings) {
 		this.ratings = ratings;
+	}
+
+	public List<Rating> get_ratings() {
+		return _ratings;
+	}
+
+	public void set_ratingsList(List<Rating> _ratings) {
+		this._ratings = _ratings;
 	}
 
 	
