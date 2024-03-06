@@ -63,7 +63,7 @@ public class RatingController {
 		try {
 			Rating _ratings = ratingRepository
 								.save(new Rating(ratings.getComment(), ratings.getPoints(),
-										ratings.getClient(), ratings.getInstructor()));
+										ratings.getCliendId(), ratings.getInstructorId()));
 			return new ResponseEntity<>(_ratings, HttpStatus.CREATED);		
 		} catch (Exception e) {
 			// TODO: handle exception
