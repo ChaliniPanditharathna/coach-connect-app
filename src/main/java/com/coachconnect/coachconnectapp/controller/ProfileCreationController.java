@@ -15,9 +15,12 @@ import com.coachconnect.coachconnectapp.model.Client;
 import com.coachconnect.coachconnectapp.model.ClientRepository;
 import com.coachconnect.coachconnectapp.model.EnumRole;
 import com.coachconnect.coachconnectapp.model.Instructor;
+import com.coachconnect.coachconnectapp.model.InstructorAvailability;
+import com.coachconnect.coachconnectapp.model.InstructorAvailabilityRepository;
 import com.coachconnect.coachconnectapp.model.InstructorRepository;
 import com.coachconnect.coachconnectapp.model.User;
 import com.coachconnect.coachconnectapp.model.UserRepository;
+import com.coachconnect.coachconnectapp.request.InstructorAvailabilityRequest;
 import com.coachconnect.coachconnectapp.request.ProfileUpdateRequest;
 import com.coachconnect.coachconnectapp.response.MessageResponse;
 
@@ -33,6 +36,11 @@ public class ProfileCreationController {
 
 	@Autowired
 	ClientRepository clientRepository;
+	
+	
+	@Autowired
+	InstructorAvailabilityRepository instructorAvailabilityRepository;
+	
 
 	@PostMapping("/updateProfile/{id}")
 	public ResponseEntity<?> insertProfileDetails(@PathVariable("id") long id,
@@ -55,12 +63,18 @@ public class ProfileCreationController {
 				Instructor instructorData = instructorRepository.findByUserId(userData.get().getId());
 
 				if (instructorData == null) {
-					instructorRepository.save(new Instructor(userData.get().getId(), profileUpdateRequest.getfName(),
+					Instructor instructor = instructorRepository.save(new Instructor(userData.get().getId(), profileUpdateRequest.getfName(),
 							profileUpdateRequest.getlName(), userData.get().getEmail(),
 							profileUpdateRequest.getBirthDate(), profileUpdateRequest.getUnitNo(),
 							profileUpdateRequest.getStreet(), profileUpdateRequest.getCity(),
 							profileUpdateRequest.getPostalCode(), profileUpdateRequest.getGender(), LocalDateTime.now(),
 							profileUpdateRequest.getQualification(), profileUpdateRequest.getExpertise()));
+					
+					System.out.println("Instructor Availability : " + profileUpdateRequest.getInstructorAvailability().getWeekDay());
+					
+					instructorAvailabilityRepository.save(new InstructorAvailability(profileUpdateRequest.getInstructorAvailability().getWeekDay(),
+							profileUpdateRequest.getInstructorAvailability().getStartTime(), profileUpdateRequest.getInstructorAvailability().getEndTime(), instructor));
+					
 					
 					return ResponseEntity.ok(new MessageResponse("Instructor updated successfully!"));
 				} else {
@@ -76,6 +90,9 @@ public class ProfileCreationController {
 					instructorData.setGender(profileUpdateRequest.getGender());
 					instructorData.setQualification(profileUpdateRequest.getQualification());
 					instructorData.setExpertise(profileUpdateRequest.getExpertise());
+					
+					instructorAvailabilityRepository.save(new InstructorAvailability(profileUpdateRequest.getInstructorAvailability().getWeekDay(),
+							profileUpdateRequest.getInstructorAvailability().getStartTime(), profileUpdateRequest.getInstructorAvailability().getEndTime(), instructorData));
 
 					return new ResponseEntity<>(instructorRepository.save(instructorData), HttpStatus.OK);
 				}
