@@ -40,9 +40,18 @@ public class InstructorAvailability {
 	@JsonIgnore
 	private Instructor instructor;
     
+    
     public InstructorAvailability() {
         
     }
+
+	public InstructorAvailability(String weekDay, Time startTime, Time endTime, Instructor instructor) {
+		super();
+		this.weekDay = weekDay;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.instructor = instructor;
+	}
 
 	public long getId() {
 		return id;
@@ -83,7 +92,4 @@ public class InstructorAvailability {
 	public void setInstructor(Instructor instructor) {
 		this.instructor = instructor;
 	}
-
-	
-
 }

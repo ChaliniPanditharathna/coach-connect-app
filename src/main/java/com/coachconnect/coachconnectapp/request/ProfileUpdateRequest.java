@@ -2,6 +2,8 @@ package com.coachconnect.coachconnectapp.request;
 
 import java.time.LocalDate;
 
+import com.coachconnect.coachconnectapp.model.InstructorAvailability;
+
 public class ProfileUpdateRequest {
 
 	private long userId;
@@ -31,6 +33,8 @@ public class ProfileUpdateRequest {
 	private String status;
 	
 	private String description;
+	
+	private InstructorAvailability instructorAvailability;
 
 	public long getUserId() {
 		return userId;
@@ -143,4 +147,14 @@ public class ProfileUpdateRequest {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public InstructorAvailability getInstructorAvailability() {
+		return instructorAvailability;
+	}
+
+	public void setInstructorAvailability(InstructorAvailability instructorAvailability) {
+		this.instructorAvailability = instructorAvailability;
+	}
+	
+	
 }
