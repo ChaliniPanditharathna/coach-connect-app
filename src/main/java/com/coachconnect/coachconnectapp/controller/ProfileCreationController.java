@@ -69,8 +69,6 @@ public class ProfileCreationController {
 							profileUpdateRequest.getPostalCode(), profileUpdateRequest.getGender(), LocalDateTime.now(),
 							profileUpdateRequest.getQualification(), profileUpdateRequest.getExpertise()));
 					
-					System.out.println("Instructor Availability : " + profileUpdateRequest.getInstructorAvailability().getWeekDay());
-					
 					instructorAvailabilityRepository.save(new InstructorAvailability(profileUpdateRequest.getInstructorAvailability().getWeekDay(),
 							profileUpdateRequest.getInstructorAvailability().getStartTime(), profileUpdateRequest.getInstructorAvailability().getEndTime(), instructor));
 					
