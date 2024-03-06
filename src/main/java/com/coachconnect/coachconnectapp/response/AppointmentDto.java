@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.coachconnect.coachconnectapp.model.Client;
-import com.coachconnect.coachconnectapp.model.ClientInstructor;
+import com.coachconnect.coachconnectapp.model.Instructor;
 import com.coachconnect.coachconnectapp.model.InstructorAvailability;
 
 public class AppointmentDto {
@@ -21,9 +21,9 @@ public class AppointmentDto {
 
 	private InstructorAvailability instructorAvailability;
 
-	private ClientInstructor clientInstructor;
-
 	private Client client;
+	
+	private Instructor instructor;
 
 	public long getId() {
 		return id;
@@ -73,14 +73,6 @@ public class AppointmentDto {
 		this.instructorAvailability = instructorAvailability;
 	}
 
-	public ClientInstructor getClientInstructor() {
-		return clientInstructor;
-	}
-
-	public void setClientInstructor(ClientInstructor clientInstructor) {
-		this.clientInstructor = clientInstructor;
-	}
-
 	public Client getClient() {
 		return client;
 	}
@@ -89,4 +81,13 @@ public class AppointmentDto {
 		this.client = client;
 	}
 
+	public Instructor getInstructor() {
+		return instructor;
+	}
+
+	public void setInstructor(Instructor instructor) {
+		this.instructor = instructor;
+	}
+
+	
 }

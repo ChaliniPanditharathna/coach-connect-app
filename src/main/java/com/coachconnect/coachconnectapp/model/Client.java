@@ -68,8 +68,8 @@ public class Client {
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
-	public Set<ClientInstructor> clientInstructors = new HashSet<>();
-
+	public Set<Appointment>  appointment = new HashSet <>();
+	
 	public Client() {
 
 	}
@@ -197,14 +197,6 @@ public class Client {
 		this.description = description;
 	}
 
-	public Set<ClientInstructor> getClientInstructors() {
-		return clientInstructors;
-	}
-
-	public void setClientInstructors(Set<ClientInstructor> clientInstructors) {
-		this.clientInstructors = clientInstructors;
-	}
-
 	public long getUserId() {
 		return userId;
 	}
@@ -212,5 +204,15 @@ public class Client {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
+
+	public Set<Appointment> getAppointment() {
+		return appointment;
+	}
+
+	public void setAppointment(Set<Appointment> appointment) {
+		this.appointment = appointment;
+	}
+	
+	
 
 }
