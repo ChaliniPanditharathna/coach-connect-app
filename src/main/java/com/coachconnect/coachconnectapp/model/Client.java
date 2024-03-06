@@ -92,6 +92,24 @@ public class Client {
 		this.updatedDate = updatedDate;
 		this.description = description;
 	}
+	
+	public Client(long userId, String fName, String lName, String email, LocalDate birthDate, String unitNo,
+			String street, String city, String postalCode, String gender, LocalDateTime createdDate,
+			String description) {
+		super();
+		this.userId = userId;
+		this.fName = fName;
+		this.lName = lName;
+		this.email = email;
+		this.birthDate = birthDate;
+		this.unitNo = unitNo;
+		this.street = street;
+		this.city = city;
+		this.postalCode = postalCode;
+		this.gender = gender;
+		this.createdDate = createdDate;
+		this.description = description;
+	}
 
 	public long getId() {
 		return id;
