@@ -105,6 +105,24 @@ public class Instructor {
 		this.expertise = expertise;
 		this.status = status;
 	}
+	
+	public Instructor(long userId, String fName, String lName, String email, LocalDate birthDate, String unitNo,
+			String street, String city, String postalCode, String gender, LocalDateTime createdDate,
+			String qualification, String expertise) {
+		this.userId = userId;
+		this.fName = fName;
+		this.lName = lName;
+		this.email = email;
+		this.birthDate = birthDate;
+		this.unitNo = unitNo;
+		this.street = street;
+		this.city = city;
+		this.postalCode = postalCode;
+		this.gender = gender;
+		this.createdDate = createdDate;
+		this.qualification = qualification;
+		this.expertise = expertise;
+	}
 
 	public long getId() {
 		return id;
