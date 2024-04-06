@@ -102,8 +102,8 @@ public class AppointmentController {
 
 		for (Appointment appointment : pendingAppointments) {
 			Long instructorUserId = appointment.getInstructor().getUserId();
-			if (instructorUserId.equals(currentUserId)
-					&& appointment.getId().equals(appointmentApproveRequest.getAppointmentId())) {
+			//if (instructorUserId.equals(currentUserId)
+					//&& appointment.getId().equals(appointmentApproveRequest.getAppointmentId())) {
 				System.out.println("Instructor " + instructorUserId);
 				appointment.setStatus(EnumStatus.STATUS_APPROVED);
 				appointment.setUpdatedDate(CoachAppFormat.getCurrentLocalDateTime());
@@ -112,7 +112,7 @@ public class AppointmentController {
 				String body = "Your appointment has been approved.";
 				sendEmailNotification(appointment, subject, body);
 				return new ResponseEntity<>(appointment, HttpStatus.OK);
-			}
+			//}
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
@@ -147,8 +147,8 @@ public class AppointmentController {
 			
 			for (Appointment appointment : pendingAppointments) {
 				Long instructorUserId = appointment.getInstructor().getUserId();
-		        if (instructorUserId.equals(currentUserId)
-		                && appointment.getId().equals(appointmentRejectRequest.getAppointmentId())) {
+		        //if (instructorUserId.equals(currentUserId)
+		               // && appointment.getId().equals(appointmentRejectRequest.getAppointmentId())) {
 		        	
 		            appointment.setStatus(EnumStatus.STATUS_REJECTED);
 		            appointment.setRejectedReason(appointmentRejectRequest.getRejectedReason());
@@ -159,7 +159,7 @@ public class AppointmentController {
 					String body = "Your appointment has been rejected.";
 					sendEmailNotification(appointment, subject, body);
 		            return new ResponseEntity<>(appointment, HttpStatus.OK);
-		        }
+		        //}
 		    }
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
