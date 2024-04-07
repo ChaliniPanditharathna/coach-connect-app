@@ -2,6 +2,8 @@ package com.coachconnect.coachconnectapp.response;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 public class AppointmentHistroyDto {
 
 	private String message;
