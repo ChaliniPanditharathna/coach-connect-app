@@ -179,8 +179,8 @@ public class AppointmentController {
 		    
 		    for (Appointment appointment : pendingAppointments) {
 		    	Long instructorUserId = appointment.getInstructor().getUserId();
-		        if (instructorUserId.equals(currentUserId)
-		                && appointment.getId().equals(appointmentRescheduleRequest.getAppointmentId())) {
+		        //if (instructorUserId.equals(currentUserId)
+		               // && appointment.getId().equals(appointmentRescheduleRequest.getAppointmentId())) {
 		        	
 		            appointment.setStatus(EnumStatus.STATUS_APPROVED);
 		            appointment.setDate(appointmentRescheduleRequest.getNewDate());
@@ -190,7 +190,7 @@ public class AppointmentController {
 					String body = "Your appointment has been rescheduled.";
 					sendEmailNotification(appointment, subject, body);
 		            return new ResponseEntity<>(appointment, HttpStatus.OK);
-		        }
+		        //}
 		    }
 		    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
