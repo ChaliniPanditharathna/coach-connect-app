@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.coachconnect.coachconnectapp.model.Appointment;
 import com.coachconnect.coachconnectapp.model.AppointmentRepository;
+import com.coachconnect.coachconnectapp.model.Client;
+import com.coachconnect.coachconnectapp.model.ClientRepository;
 import com.coachconnect.coachconnectapp.model.EnumStatus;
 import com.coachconnect.coachconnectapp.model.Instructor;
 import com.coachconnect.coachconnectapp.model.InstructorAvailability;
@@ -63,6 +66,8 @@ public class AppointmentController {
 	@Autowired
 	InstructorRepository instructorRepo;
 	
+	@Autowired
+	ClientRepository clientRepo;
 	
 
 	@GetMapping("/appointment")
@@ -192,28 +197,38 @@ public class AppointmentController {
 	
 	
 	@GetMapping("/appointment/history")
-	public ResponseEntity<AppointmentHistroyDto> getAppoinmentByCurrentDateAndInstructorId(
-			@RequestParam(value = "searchKey", required = true) String searchKey) {
+	public ResponseEntity<AppointmentHistroyDto> getAppoinmentByCurrentDateAndClientId(@RequestParam(required = false) Long userId,
+			@RequestParam(required = true) String searchKey, @RequestParam(required = false) String userRole) {
 
 		List<AppointmentDto> appointmentDtos = new ArrayList<>();
 		List<Appointment> appointments = new ArrayList<>();
 		AppointmentHistroyDto appointmentResponseDto = new AppointmentHistroyDto();
 		try {
-			long currentUserId = JwtUtils.getCurrentUserId(); 
 		
-			Instructor instructor = instructorRepo.findByUserId(currentUserId);
+			if(userRole.equals("ROLE_CLIENT")) {
+				Optional<Client> client = clientRepo.findByUserId(userId);
+				if ("previous".equals(searchKey)) {
+					appointmentRepo.findByDateBeforeAndClientId(LocalDate.now(), client.get().getId()).forEach(appointments::add);
+				
+				}
+				if ("upcoming".equals(searchKey)) {
+					appointmentRepo.findByDateAfterAndClientId(LocalDate.now(),client.get().getId()).forEach(appointments::add);
+				}
+			}
 			
-			if ("previous".equals(searchKey)) {
-				appointmentRepo.findByDateBeforeAndInstructorId(LocalDate.now(), instructor.getId()).forEach(appointments::add);
-
+			if(userRole.equals("ROLE_INSTRUCTOR")) {
+				Instructor instructor = instructorRepo.findByUserId(userId);
+				if ("previous".equals(searchKey)) {
+					appointmentRepo.findByDateBeforeAndInstructorId(LocalDate.now(), instructor.getId()).forEach(appointments::add);
+					
+				}
+				if ("upcoming".equals(searchKey)) {
+					appointmentRepo.findByDateAfterAndInstructorId(LocalDate.now(),instructor.getId()).forEach(appointments::add);
+				}
 			}
-			if ("upcomming".equals(searchKey)) {
-				appointmentRepo.findByDateAfter(LocalDate.now()).forEach(appointments::add);
-			}
-
-			AppointmentDto appointmentDto = new AppointmentDto();
+			
 			for (Appointment appointment : appointments) {
-			
+				AppointmentDto appointmentDto = new AppointmentDto();
 				appointmentDto.setDate(appointment.getDate());
 				appointmentDto.setClient(appointment.getClient());
 				appointmentDto.setCreatedDate(appointment.getCreatedDate());
@@ -223,8 +238,9 @@ public class AppointmentController {
 				appointmentDto.setId(appointment.getId());
 				appointmentDto.setInstructor(appointment.getInstructor());
 				appointmentDtos.add(appointmentDto);
+			
 			}
-
+			
 			if (!appointments.isEmpty()) {
 				appointmentResponseDto.setAppointments(appointmentDtos);
 				appointmentResponseDto.setStatus(HttpStatus.OK.name());
@@ -238,6 +254,7 @@ public class AppointmentController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	
 	private void sendEmailNotification(Appointment appointment,String subject,String body) {
 		 String recipientEmail = appointment.getClient().getEmail(); 
