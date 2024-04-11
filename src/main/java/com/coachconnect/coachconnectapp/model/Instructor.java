@@ -82,6 +82,10 @@ public class Instructor {
 	@JsonIgnore
 	public Set<Appointment>  appointment = new HashSet <>();
 
+	@OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @JsonIgnore
+	public Set<Rating> rating = new HashSet<>();
+
 	public Instructor() {
 
 	}
@@ -272,6 +276,14 @@ public class Instructor {
 
 	public void setAppointment(Set<Appointment> appointment) {
 		this.appointment = appointment;
+	}
+
+	public Set<Rating> getRating() {
+		return rating;
+	}
+
+	public void setRating(Set<Rating> rating) {
+		this.rating = rating;
 	}
 
 
