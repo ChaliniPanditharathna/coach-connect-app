@@ -71,9 +71,11 @@ public class ProfileCreationController {
 							profileUpdateRequest.getPostalCode(), profileUpdateRequest.getGender(), LocalDateTime.now(),
 							profileUpdateRequest.getQualification(), profileUpdateRequest.getExpertise()));
 					
-					instructorAvailabilityRepository.save(new InstructorAvailability(profileUpdateRequest.getInstructorAvailability().getWeekDay(),
-							profileUpdateRequest.getInstructorAvailability().getStartTime(), profileUpdateRequest.getInstructorAvailability().getEndTime(), instructor));
-					
+					for (InstructorAvailability availability : profileUpdateRequest.getInstructorAvailability()) {
+					    instructorAvailabilityRepository.save(new InstructorAvailability(
+					            availability.getWeekDay(), availability.getStartTime(), 
+					            availability.getEndTime(), instructor));
+					}
 					
 					return ResponseEntity.ok(new MessageResponse("Instructor updated successfully!"));
 				} else {
@@ -90,9 +92,12 @@ public class ProfileCreationController {
 					instructorData.setQualification(profileUpdateRequest.getQualification());
 					instructorData.setExpertise(profileUpdateRequest.getExpertise());
 					
-					instructorAvailabilityRepository.save(new InstructorAvailability(profileUpdateRequest.getInstructorAvailability().getWeekDay(),
-							profileUpdateRequest.getInstructorAvailability().getStartTime(), profileUpdateRequest.getInstructorAvailability().getEndTime(), instructorData));
+					for (InstructorAvailability availability : profileUpdateRequest.getInstructorAvailability()) {
+						instructorAvailabilityRepository.save(new InstructorAvailability(availability.getWeekDay(),
+								availability.getStartTime(), availability.getEndTime(), instructorData));
 
+					}
+					
 					return new ResponseEntity<>(instructorRepository.save(instructorData), HttpStatus.OK);
 				}
 
