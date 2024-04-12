@@ -25,7 +25,6 @@ public class AdminContoller {
 	InstructorRepository instructorRepository;
 	
     @PutMapping("/approve-instructor/{instructorId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> approveInstructor(@PathVariable Long instructorId) {
         Instructor instructor = instructorRepository.findInstructorById(instructorId);
         if (instructor != null) {
@@ -33,6 +32,19 @@ public class AdminContoller {
             instructor.setUpdatedDate(LocalDateTime.now());
             instructorRepository.save(instructor);
             return ResponseEntity.ok("Instructor approved successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
+        }
+    }
+    
+    @PutMapping("/deactivate-instructor/{instructorId}")
+    public ResponseEntity<String> deactivateInstructor(@PathVariable Long instructorId) {
+        Instructor instructor = instructorRepository.findInstructorById(instructorId);
+        if (instructor != null) {
+            instructor.setStatus("Inactive");
+            instructor.setUpdatedDate(LocalDateTime.now());
+            instructorRepository.save(instructor);
+            return ResponseEntity.ok("Instructor deactivate successfully");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instructor not found");
         }
